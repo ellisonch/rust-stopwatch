@@ -1,0 +1,8 @@
+[package]
+
+name = "stopwatch"
+version = "0.0.1"
+authors = ["Chucky Ellison <cme@freefour.com>"]
+
+[dependencies]
+time = "*"
