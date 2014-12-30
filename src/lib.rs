@@ -2,10 +2,9 @@ extern crate time;
 
 use std::time::Duration;
 use std::default::Default;
-
+use std::fmt;
 use time::{Timespec};
 
-#[deriving(Show)]
 #[deriving(Copy)]
 pub struct Stopwatch {
 	start_time: Option<Timespec>,
@@ -18,6 +17,12 @@ impl Default for Stopwatch {
 			start_time: None,
 			elapsed: Duration::zero(),
 		}
+	}
+}
+
+impl fmt::Show for Stopwatch {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		return write!(f, "{}", self.elapsed());
 	}
 }
 
@@ -61,14 +66,14 @@ impl Stopwatch {
 		self.start();
 	}
 
-	pub fn is_running(&mut self) -> bool {
+	pub fn is_running(&self) -> bool {
 		return match self.start_time {
 			Some(_) => true,
 			None => false,
 		};
 	}
 
-	pub fn elapsed(&mut self) -> Duration {
+	pub fn elapsed(&self) -> Duration {
 		match self.start_time {
 			Some(t1) => {
 				let t2 = current_time();
@@ -79,8 +84,7 @@ impl Stopwatch {
 			},
 		}
 	}
-	pub fn elapsed_ms(&mut self) -> i64 {
+	pub fn elapsed_ms(&self) -> i64 {
 		return self.elapsed().num_milliseconds();
 	}
-
 }

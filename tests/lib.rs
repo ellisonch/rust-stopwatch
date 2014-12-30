@@ -7,7 +7,7 @@ use std::io::timer;
 use std::time::Duration;
 
 static SLEEP_MS: i64 = 50;
-static TOLERANCE_PERCENTAGE: f64 = 0.2;
+static TOLERANCE_PERCENTAGE: f64 = 0.3;
 
 #[test]
 fn elapsed_ms() {
@@ -83,7 +83,6 @@ fn reset() {
 
 
 
-
 /////////////// helpers
 
 fn assert_near(x: i64, y: i64, tolerance: i64) {
@@ -93,7 +92,7 @@ fn assert_near(x: i64, y: i64, tolerance: i64) {
 	}
 }
 
-fn assert_sw_near(mut sw: Stopwatch, elapsed: i64) {
+fn assert_sw_near(sw: Stopwatch, elapsed: i64) {
 	let tolerance_value = (TOLERANCE_PERCENTAGE * elapsed as f64) as i64;
 	assert_near(elapsed, sw.elapsed_ms(), tolerance_value);
 }
