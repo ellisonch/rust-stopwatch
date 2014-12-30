@@ -1,6 +1,8 @@
 # rust-stopwatch
 This is a simple module used to time things in Rust.
 
+[![Build Status](https://travis-ci.org/ellisonch/rust-stopwatch.svg?branch=master)](https://travis-ci.org/ellisonch/rust-stopwatch)
+
 ## Example
 ```rust
 extern crate stopwatch;
