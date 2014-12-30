@@ -83,6 +83,7 @@ fn reset() {
 
 
 
+
 /////////////// helpers
 
 fn assert_near(x: i64, y: i64, tolerance: i64) {
@@ -94,5 +95,5 @@ fn assert_near(x: i64, y: i64, tolerance: i64) {
 
 fn assert_sw_near(mut sw: Stopwatch, elapsed: i64) {
 	let tolerance_value = (TOLERANCE_PERCENTAGE * elapsed as f64) as i64;
-	assert_near(elapsed, sw.elapsed_ms().to_i64().unwrap(), tolerance_value);
+	assert_near(elapsed, sw.elapsed_ms(), tolerance_value);
 }

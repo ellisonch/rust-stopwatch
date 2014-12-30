@@ -9,14 +9,14 @@ use time::{Timespec};
 #[deriving(Copy)]
 pub struct Stopwatch {
 	start_time: Option<Timespec>,
-	additional_duration: Duration,
+	elapsed: Duration,
 }
 
 impl Default for Stopwatch {
 	fn default () -> Stopwatch {
 		Stopwatch {
 			start_time: None,
-			additional_duration: Duration::zero(),
+			elapsed: Duration::zero(),
 		}
 	}
 }
@@ -45,7 +45,7 @@ impl Stopwatch {
 		match self.start_time {
 			Some(t1) => {
 				let t2 = current_time();
-				self.additional_duration = t2 - t1;
+				self.elapsed = self.elapsed + (t2 - t1);
 				self.start_time = None;
 			},
 			None => {
@@ -54,7 +54,7 @@ impl Stopwatch {
 	}
 	pub fn reset(&mut self) {
 		self.start_time = None;
-		self.additional_duration = Duration::zero();
+		self.elapsed = Duration::zero();
 	}
 	pub fn restart(&mut self) {
 		self.reset();
@@ -72,20 +72,15 @@ impl Stopwatch {
 		match self.start_time {
 			Some(t1) => {
 				let t2 = current_time();
-				return t2 - t1;
+				return (t2 - t1) + self.elapsed;
 			},
 			None => {
-				return self.additional_duration;
+				return self.elapsed;
 			},
 		}
 	}
-	pub fn elapsed_ms(&mut self) -> u64 {
-		let res = match self.elapsed().num_milliseconds().to_u64() {
-			Some(i) => i,
-			None => {
-				panic!("Elapsed conversion from i64 to u64 should never fail")
-			}
-		};
-		return res;
+	pub fn elapsed_ms(&mut self) -> i64 {
+		return self.elapsed().num_milliseconds();
 	}
+
 }
