@@ -3,11 +3,10 @@ extern crate time;
 use std::time::Duration;
 use std::default::Default;
 use std::fmt;
-use time::{Timespec};
 
 #[deriving(Copy)]
 pub struct Stopwatch {
-	start_time: Option<Timespec>,
+	start_time: Option<u64>,
 	elapsed: Duration,
 }
 
@@ -26,8 +25,30 @@ impl fmt::Show for Stopwatch {
 	}
 }
 
-fn current_time() -> Timespec {
-	return time::now_utc().to_timespec();
+fn current_time() -> u64 {
+	return time::precise_time_ns();
+}
+
+// This only works under the assumption that less than 2^63 ns have passed between t1 and t2 (~292 years)
+fn ns_times_to_duration(t1: u64, t2: u64) -> Duration {
+	let diff_u: u64;
+
+	if t1 <= t2 {
+		diff_u = t2 - t1;
+	} else {
+		// in this case, we handle what happens if the time wrapped around
+		// we can say t1 = (u64::MAX - x) for some x, and the desired duration is (x + t2)
+		// (u64::MAX - t1) = (u64::MAX - (u64::MAX - x)) = x
+		diff_u = (std::u64::MAX - t1) + t2;
+	}
+	let diff_i = match diff_u.to_i64() {
+		Some(i) => i,
+		None => {
+			debug_assert!(false, "Stopwatch saw a time of more than 292 years, this probably indicates a bug");
+			0
+		}
+	};
+	return Duration::nanoseconds(diff_i);
 }
 
 impl Stopwatch {
@@ -37,25 +58,16 @@ impl Stopwatch {
 	}
 	pub fn start_new() -> Stopwatch {
 		let mut sw = Stopwatch::new();
-		let time = current_time();
-		sw.start_time = Some(time);
+		sw.start();
 		return sw;
 	}
 
 	pub fn start(&mut self) {
-		let time = current_time();
-		self.start_time = Some(time);
+		self.start_time = Some(current_time());
 	}
 	pub fn stop(&mut self) {
-		match self.start_time {
-			Some(t1) => {
-				let t2 = current_time();
-				self.elapsed = self.elapsed + (t2 - t1);
-				self.start_time = None;
-			},
-			None => {
-			},
-		}
+		self.elapsed = self.elapsed();
+		self.start_time = None;
 	}
 	pub fn reset(&mut self) {
 		self.start_time = None;
@@ -67,17 +79,15 @@ impl Stopwatch {
 	}
 
 	pub fn is_running(&self) -> bool {
-		return match self.start_time {
-			Some(_) => true,
-			None => false,
-		};
+		return self.start_time.is_some();
 	}
 
 	pub fn elapsed(&self) -> Duration {
 		match self.start_time {
 			Some(t1) => {
 				let t2 = current_time();
-				return (t2 - t1) + self.elapsed;
+				let new_duration = ns_times_to_duration(t1, t2);
+				return new_duration + self.elapsed;
 			},
 			None => {
 				return self.elapsed;
