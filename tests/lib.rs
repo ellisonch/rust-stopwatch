@@ -10,6 +10,12 @@ static SLEEP_MS: i64 = 50;
 static TOLERANCE_PERCENTAGE: f64 = 0.3;
 
 #[test]
+fn elapsed_none() {
+	let sw = Stopwatch::new();
+	assert_eq!(sw.elapsed_ms(), 0);
+}
+
+#[test]
 fn elapsed_ms() {
 	let sw = Stopwatch::start_new();
 	timer::sleep(Duration::milliseconds(SLEEP_MS));
