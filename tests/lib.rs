@@ -10,6 +10,16 @@ static SLEEP_MS: i64 = 50;
 static TOLERANCE_PERCENTAGE: f64 = 0.3;
 
 #[test]
+fn repeated_stops() {
+	let mut sw = Stopwatch::start_new();
+	for _ in range(0, 1000i) {
+		sw.stop();
+		sw.start();
+	}
+	assert_sw_near(sw, 0);
+}
+
+#[test]
 fn elapsed_none() {
 	let sw = Stopwatch::new();
 	assert_eq!(sw.elapsed_ms(), 0);
