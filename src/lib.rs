@@ -31,16 +31,7 @@ fn current_time() -> u64 {
 
 // This only works under the assumption that less than 2^63 ns have passed between t1 and t2 (~292 years)
 fn ns_times_to_duration(t1: u64, t2: u64) -> Duration {
-	let diff_u: u64;
-
-	if t1 <= t2 {
-		diff_u = t2 - t1;
-	} else {
-		// in this case, we handle what happens if the time wrapped around
-		// we can say t1 = (u64::MAX - x) for some x, and the desired duration is (x + t2)
-		// (u64::MAX - t1) = (u64::MAX - (u64::MAX - x)) = x
-		diff_u = (std::u64::MAX - t1) + t2;
-	}
+	let diff_u = t2 - t1; // works even if there's wraparound
 	let diff_i = match diff_u.to_i64() {
 		Some(i) => i,
 		None => {
