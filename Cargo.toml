@@ -4,5 +4,11 @@ name = "stopwatch"
 version = "0.0.2"
 authors = ["Chucky Ellison <cme@freefour.com>"]
 
+description = "A stopwatch library for timing things."
+repository = "https://github.com/ellisonch/rust-stopwatch"
+readme = "README.md"
+keywords = ["stopwatch", "timing"]
+license = "MIT"
+
 [dependencies]
 time = "*"
