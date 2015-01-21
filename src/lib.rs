@@ -3,8 +3,9 @@ extern crate time;
 use std::time::Duration;
 use std::default::Default;
 use std::fmt;
+use std::num::ToPrimitive;
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct Stopwatch {
 	start_time: Option<u64>,
 	elapsed: Duration,
