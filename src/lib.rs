@@ -20,7 +20,7 @@ impl Default for Stopwatch {
 	}
 }
 
-impl fmt::Show for Stopwatch {
+impl fmt::String for Stopwatch {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		return write!(f, "{}", self.elapsed());
 	}

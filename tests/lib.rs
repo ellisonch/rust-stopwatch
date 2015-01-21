@@ -12,7 +12,7 @@ static TOLERANCE_PERCENTAGE: f64 = 0.3;
 #[test]
 fn repeated_stops() {
 	let mut sw = Stopwatch::start_new();
-	for _ in range(0, 1000i) {
+	for _ in (0..1000i32) {
 		sw.stop();
 		sw.start();
 	}
@@ -104,7 +104,7 @@ fn reset() {
 fn assert_near(x: i64, y: i64, tolerance: i64) {
 	let diff = (x - y).abs();
 	if diff > tolerance {
-		panic!("Expected {}, got {}", x, y);
+		panic!("Expected {:?}, got {:?}", x, y);
 	}
 }
 
