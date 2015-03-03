@@ -3,7 +3,7 @@ extern crate stopwatch;
 
 use stopwatch::{Stopwatch};
 use std::num::SignedInt;
-use std::io::timer;
+use std::old_io::timer;
 use std::time::Duration;
 
 static SLEEP_MS: i64 = 50;
