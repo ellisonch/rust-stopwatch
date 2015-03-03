@@ -47,7 +47,7 @@ fn stop() {
 fn resume_once() {
 	let mut sw = Stopwatch::start_new();
 	timer::sleep(Duration::milliseconds(SLEEP_MS));
-	sw.stop();	
+	sw.stop();
 	assert_sw_near(sw, SLEEP_MS);
 	sw.start();
 	timer::sleep(Duration::milliseconds(SLEEP_MS));
@@ -58,7 +58,7 @@ fn resume_once() {
 fn resume_twice() {
 	let mut sw = Stopwatch::start_new();
 	timer::sleep(Duration::milliseconds(SLEEP_MS));
-	sw.stop();	
+	sw.stop();
 	assert_sw_near(sw, SLEEP_MS);
 	sw.start();
 	timer::sleep(Duration::milliseconds(SLEEP_MS));
