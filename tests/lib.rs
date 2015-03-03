@@ -1,3 +1,7 @@
+#![feature(core)]
+#![feature(old_io)]
+#![feature(std_misc)]
+
 extern crate time;
 extern crate stopwatch;
 

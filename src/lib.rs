@@ -1,3 +1,6 @@
+#![feature(core)]
+#![feature(std_misc)]
+
 extern crate time;
 
 use std::time::Duration;
