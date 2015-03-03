@@ -1,9 +1,13 @@
+#![feature(core)]
+#![feature(old_io)]
+#![feature(std_misc)]
+
 extern crate time;
 extern crate stopwatch;
 
 use stopwatch::{Stopwatch};
 use std::num::SignedInt;
-use std::io::timer;
+use std::old_io::timer;
 use std::time::Duration;
 
 static SLEEP_MS: i64 = 50;
@@ -47,7 +51,7 @@ fn stop() {
 fn resume_once() {
 	let mut sw = Stopwatch::start_new();
 	timer::sleep(Duration::milliseconds(SLEEP_MS));
-	sw.stop();	
+	sw.stop();
 	assert_sw_near(sw, SLEEP_MS);
 	sw.start();
 	timer::sleep(Duration::milliseconds(SLEEP_MS));
@@ -58,7 +62,7 @@ fn resume_once() {
 fn resume_twice() {
 	let mut sw = Stopwatch::start_new();
 	timer::sleep(Duration::milliseconds(SLEEP_MS));
-	sw.stop();	
+	sw.stop();
 	assert_sw_near(sw, SLEEP_MS);
 	sw.start();
 	timer::sleep(Duration::milliseconds(SLEEP_MS));
