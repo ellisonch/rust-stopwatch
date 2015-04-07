@@ -8,7 +8,7 @@ use std::default::Default;
 use std::fmt;
 use std::num::ToPrimitive;
 
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 pub struct Stopwatch {
 	start_time: Option<u64>,
 	elapsed: Duration,
