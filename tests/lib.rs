@@ -1,14 +1,9 @@
 #![feature(core)]
-#![feature(old_io)]
-#![feature(std_misc)]
 
 extern crate time;
 extern crate stopwatch;
 
 use stopwatch::{Stopwatch};
-use std::num::SignedInt;
-use std::old_io::timer;
-use std::time::Duration;
 
 static SLEEP_MS: i64 = 50;
 static TOLERANCE_PERCENTAGE: f64 = 0.3;
@@ -32,44 +27,44 @@ fn elapsed_none() {
 #[test]
 fn elapsed_ms() {
 	let sw = Stopwatch::start_new();
-	timer::sleep(Duration::milliseconds(SLEEP_MS));
+	sleep_ms(SLEEP_MS);
 	assert_sw_near(sw, SLEEP_MS);
 }
 
 #[test]
 fn stop() {
 	let mut sw = Stopwatch::start_new();
-	timer::sleep(Duration::milliseconds(SLEEP_MS));
+	sleep_ms(SLEEP_MS);
 	sw.stop();
 	assert_sw_near(sw, SLEEP_MS);
 
-	timer::sleep(Duration::milliseconds(SLEEP_MS));
+	sleep_ms(SLEEP_MS);
 	assert_sw_near(sw, SLEEP_MS);
 }
 
 #[test]
 fn resume_once() {
 	let mut sw = Stopwatch::start_new();
-	timer::sleep(Duration::milliseconds(SLEEP_MS));
+	sleep_ms(SLEEP_MS);
 	sw.stop();
 	assert_sw_near(sw, SLEEP_MS);
 	sw.start();
-	timer::sleep(Duration::milliseconds(SLEEP_MS));
+	sleep_ms(SLEEP_MS);
 	assert_sw_near(sw, 2 * SLEEP_MS);
 }
 
 #[test]
 fn resume_twice() {
 	let mut sw = Stopwatch::start_new();
-	timer::sleep(Duration::milliseconds(SLEEP_MS));
+	sleep_ms(SLEEP_MS);
 	sw.stop();
 	assert_sw_near(sw, SLEEP_MS);
 	sw.start();
-	timer::sleep(Duration::milliseconds(SLEEP_MS));
+	sleep_ms(SLEEP_MS);
 	sw.stop();
 	assert_sw_near(sw, 2 * SLEEP_MS);
 	sw.start();
-	timer::sleep(Duration::milliseconds(SLEEP_MS));
+	sleep_ms(SLEEP_MS);
 	assert_sw_near(sw, 3 * SLEEP_MS);
 }
 
@@ -86,16 +81,16 @@ fn is_running() {
 #[test]
 fn restart() {
 	let mut sw = Stopwatch::start_new();
-	timer::sleep(Duration::milliseconds(SLEEP_MS));
+	sleep_ms(SLEEP_MS);
 	sw.restart();
-	timer::sleep(Duration::milliseconds(SLEEP_MS));
+	sleep_ms(SLEEP_MS);
 	assert_sw_near(sw, SLEEP_MS);
 }
 
 #[test]
 fn reset() {
 	let mut sw = Stopwatch::start_new();
-	timer::sleep(Duration::milliseconds(SLEEP_MS));
+	sleep_ms(SLEEP_MS);
 	sw.reset();
 	assert!(!sw.is_running());
 	assert_eq!(sw.elapsed_ms(), 0);
@@ -104,6 +99,11 @@ fn reset() {
 
 
 /////////////// helpers
+
+fn sleep_ms(ms: i64) {
+	use std::num::ToPrimitive;
+	std::thread::sleep_ms(ms.to_u32().unwrap())
+}
 
 fn assert_near(x: i64, y: i64, tolerance: i64) {
 	let diff = (x - y).abs();
