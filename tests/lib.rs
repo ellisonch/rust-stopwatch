@@ -1,5 +1,3 @@
-#![feature(core)]
-
 extern crate time;
 extern crate stopwatch;
 
@@ -96,13 +94,10 @@ fn reset() {
 	assert_eq!(sw.elapsed_ms(), 0);
 }
 
-
-
 /////////////// helpers
 
 fn sleep_ms(ms: i64) {
-	use std::num::ToPrimitive;
-	std::thread::sleep_ms(ms.to_u32().unwrap())
+	std::thread::sleep_ms(ms as u32)
 }
 
 fn assert_near(x: i64, y: i64, tolerance: i64) {

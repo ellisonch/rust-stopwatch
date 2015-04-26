@@ -1,4 +1,3 @@
-#![feature(core)]
 #![feature(std_misc)]
 
 extern crate time;
@@ -6,7 +5,6 @@ extern crate time;
 use std::time::Duration;
 use std::default::Default;
 use std::fmt;
-use std::num::ToPrimitive;
 
 #[derive(Clone, Copy)]
 pub struct Stopwatch {
@@ -35,15 +33,22 @@ fn current_time() -> u64 {
 
 // This only works under the assumption that less than 2^63 ns have passed between t1 and t2 (~292 years)
 fn ns_times_to_duration(t1: u64, t2: u64) -> Duration {
-	let diff_u = t2 - t1; // works even if there's wraparound
-	let diff_i = match diff_u.to_i64() {
-		Some(i) => i,
-		None => {
-			debug_assert!(false, "Stopwatch saw a time of more than 292 years, this probably indicates a bug");
-			0
-		}
-	};
+	let mut diff_i = t2.wrapping_sub(t1) as i64;
+	if diff_i < 0 {
+		debug_assert!(false, "Stopwatch saw a time of more than 292 years, this probably indicates a bug");
+		diff_i = 0;
+	}
 	return Duration::nanoseconds(diff_i);
+}
+
+#[test]
+fn test_ns_times_to_duration() {
+	assert_eq!(ns_times_to_duration(100, 1100), Duration::nanoseconds(1000));
+	assert_eq!(ns_times_to_duration(std::u64::MAX-30, std::u64::MAX-10), Duration::nanoseconds(20));
+	assert_eq!(ns_times_to_duration(std::u64::MAX-10, std::u64::MAX), Duration::nanoseconds(10));
+	assert_eq!(ns_times_to_duration(std::u64::MAX-10, 0), Duration::nanoseconds(11));
+	assert_eq!(ns_times_to_duration(std::u64::MAX-10, 9), Duration::nanoseconds(20));
+	// assert_eq!(ns_times_to_duration(0, std::u64::MAX-999), Duration::nanoseconds(0));
 }
 
 impl Stopwatch {
