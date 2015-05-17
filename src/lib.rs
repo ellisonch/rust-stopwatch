@@ -96,6 +96,6 @@ impl Stopwatch {
 	}
 	pub fn elapsed_ms(&self) -> u64 {
         let eps = self.elapsed();
-        eps.secs() + eps.extra_nanos() as u64 / 1_000_000
+        eps.secs() * 1_000 + eps.extra_nanos() as u64 / 1_000_000
 	}
 }
