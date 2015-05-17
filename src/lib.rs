@@ -1,4 +1,4 @@
-#![feature(std_misc)]
+#![feature(duration)]
 
 extern crate time;
 
@@ -16,7 +16,7 @@ impl Default for Stopwatch {
 	fn default () -> Stopwatch {
 		Stopwatch {
 			start_time: None,
-			elapsed: Duration::zero(),
+			elapsed: Duration::new(0, 0),
 		}
 	}
 }
@@ -33,22 +33,22 @@ fn current_time() -> u64 {
 
 // This only works under the assumption that less than 2^63 ns have passed between t1 and t2 (~292 years)
 fn ns_times_to_duration(t1: u64, t2: u64) -> Duration {
-	let mut diff_i = t2.wrapping_sub(t1) as i64;
-	if diff_i < 0 {
-		debug_assert!(false, "Stopwatch saw a time of more than 292 years, this probably indicates a bug");
-		diff_i = 0;
-	}
-	return Duration::nanoseconds(diff_i);
+    let mut diff = t2.wrapping_sub(t1);
+    if (diff as i64) < 0 {
+	    debug_assert!(false, "Stopwatch saw a time of more than 292 years, this probably indicates a bug");
+        diff = 0;
+    }
+    return Duration::new(diff / 1_000_000_000, (diff % 1_000_000_000) as u32)
 }
 
 #[test]
 fn test_ns_times_to_duration() {
-	assert_eq!(ns_times_to_duration(100, 1100), Duration::nanoseconds(1000));
-	assert_eq!(ns_times_to_duration(std::u64::MAX-30, std::u64::MAX-10), Duration::nanoseconds(20));
-	assert_eq!(ns_times_to_duration(std::u64::MAX-10, std::u64::MAX), Duration::nanoseconds(10));
-	assert_eq!(ns_times_to_duration(std::u64::MAX-10, 0), Duration::nanoseconds(11));
-	assert_eq!(ns_times_to_duration(std::u64::MAX-10, 9), Duration::nanoseconds(20));
-	// assert_eq!(ns_times_to_duration(0, std::u64::MAX-999), Duration::nanoseconds(0));
+	assert_eq!(ns_times_to_duration(100, 1100), Duration::new(0, 1000));
+	assert_eq!(ns_times_to_duration(std::u64::MAX-30, std::u64::MAX-10), Duration::new(0, 20));
+	assert_eq!(ns_times_to_duration(std::u64::MAX-10, std::u64::MAX), Duration::new(0,10));
+	assert_eq!(ns_times_to_duration(std::u64::MAX-10, 0), Duration::new(0, 11));
+	assert_eq!(ns_times_to_duration(std::u64::MAX-10, 9), Duration::new(0, 20));
+	// assert_eq!(ns_times_to_duration(0, std::u64::MAX-999), Duration::new(0, 0));
 }
 
 impl Stopwatch {
@@ -71,7 +71,7 @@ impl Stopwatch {
 	}
 	pub fn reset(&mut self) {
 		self.start_time = None;
-		self.elapsed = Duration::zero();
+		self.elapsed = Duration::new(0, 0);
 	}
 	pub fn restart(&mut self) {
 		self.reset();
@@ -94,7 +94,8 @@ impl Stopwatch {
 			},
 		}
 	}
-	pub fn elapsed_ms(&self) -> i64 {
-		return self.elapsed().num_milliseconds();
+	pub fn elapsed_ms(&self) -> u64 {
+        let eps = self.elapsed();
+        eps.secs() + eps.extra_nanos() as u64 / 1_000_000
 	}
 }

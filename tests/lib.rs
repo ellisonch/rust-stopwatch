@@ -3,7 +3,7 @@ extern crate stopwatch;
 
 use stopwatch::{Stopwatch};
 
-static SLEEP_MS: i64 = 50;
+static SLEEP_MS: u64 = 50;
 static TOLERANCE_PERCENTAGE: f64 = 0.3;
 
 #[test]
@@ -96,18 +96,18 @@ fn reset() {
 
 /////////////// helpers
 
-fn sleep_ms(ms: i64) {
+fn sleep_ms(ms: u64) {
 	std::thread::sleep_ms(ms as u32)
 }
 
-fn assert_near(x: i64, y: i64, tolerance: i64) {
-	let diff = (x - y).abs();
+fn assert_near(x: u64, y: u64, tolerance: u64) {
+	let diff = x - y;
 	if diff > tolerance {
 		panic!("Expected {:?}, got {:?}", x, y);
 	}
 }
 
-fn assert_sw_near(sw: Stopwatch, elapsed: i64) {
-	let tolerance_value = (TOLERANCE_PERCENTAGE * elapsed as f64) as i64;
+fn assert_sw_near(sw: Stopwatch, elapsed: u64) {
+	let tolerance_value = (TOLERANCE_PERCENTAGE * elapsed as f64) as u64;
 	assert_near(elapsed, sw.elapsed_ms(), tolerance_value);
 }
