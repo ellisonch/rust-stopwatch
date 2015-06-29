@@ -2,11 +2,12 @@
 #![feature(std_misc)]
 
 extern crate time;
+extern crate num;
 
 use std::time::Duration;
 use std::default::Default;
 use std::fmt;
-use std::num::ToPrimitive;
+use num::traits::ToPrimitive;
 
 #[derive(Clone, Copy)]
 pub struct Stopwatch {
