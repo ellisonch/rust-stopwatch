@@ -1,6 +1,3 @@
-#![feature(core)]
-#![feature(std_misc)]
-
 extern crate time;
 extern crate num;
 

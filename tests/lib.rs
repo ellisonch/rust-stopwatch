@@ -1,5 +1,3 @@
-#![feature(core)]
-
 extern crate time;
 extern crate num;
 extern crate stopwatch;
