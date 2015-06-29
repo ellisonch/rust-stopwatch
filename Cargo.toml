@@ -1,7 +1,7 @@
 [package]
 
 name = "stopwatch"
-version = "0.0.5"
+version = "0.0.6"
 authors = ["Chucky Ellison <cme@freefour.com>"]
 
 description = "A stopwatch library for timing things."
@@ -12,3 +12,4 @@ license = "MIT"
 
 [dependencies]
 time = "*"
+num = "*"

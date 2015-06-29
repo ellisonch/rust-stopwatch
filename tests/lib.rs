@@ -1,6 +1,5 @@
-#![feature(core)]
-
 extern crate time;
+extern crate num;
 extern crate stopwatch;
 
 use stopwatch::{Stopwatch};
@@ -101,7 +100,7 @@ fn reset() {
 /////////////// helpers
 
 fn sleep_ms(ms: i64) {
-	use std::num::ToPrimitive;
+	use num::ToPrimitive;
 	std::thread::sleep_ms(ms.to_u32().unwrap())
 }
 
