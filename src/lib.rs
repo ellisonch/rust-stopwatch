@@ -4,10 +4,10 @@
 extern crate time;
 extern crate num;
 
-use std::time::Duration;
 use std::default::Default;
 use std::fmt;
 use num::traits::ToPrimitive;
+use time::Duration;
 
 #[derive(Clone, Copy)]
 pub struct Stopwatch {
