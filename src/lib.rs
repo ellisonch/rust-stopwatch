@@ -23,12 +23,12 @@ impl Default for Stopwatch {
 
 impl fmt::Display for Stopwatch {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		return write!(f, "{}", self.elapsed());
+		write!(f, "{}", self.elapsed())
 	}
 }
 
 fn current_time() -> u64 {
-	return time::precise_time_ns();
+	time::precise_time_ns()
 }
 
 // This only works under the assumption that less than 2^63 ns have passed between t1 and t2 (~292 years)
@@ -41,18 +41,17 @@ fn ns_times_to_duration(t1: u64, t2: u64) -> Duration {
 			0
 		}
 	};
-	return Duration::nanoseconds(diff_i);
+	Duration::nanoseconds(diff_i)
 }
 
 impl Stopwatch {
 	pub fn new() -> Stopwatch {
-		let sw: Stopwatch = Default::default();
-		return sw;
+		Default::default()
 	}
 	pub fn start_new() -> Stopwatch {
 		let mut sw = Stopwatch::new();
 		sw.start();
-		return sw;
+        sw
 	}
 
 	pub fn start(&mut self) {
@@ -72,7 +71,7 @@ impl Stopwatch {
 	}
 
 	pub fn is_running(&self) -> bool {
-		return self.start_time.is_some();
+		self.start_time.is_some()
 	}
 
 	pub fn elapsed(&self) -> Duration {
@@ -80,14 +79,14 @@ impl Stopwatch {
 			Some(t1) => {
 				let t2 = current_time();
 				let new_duration = ns_times_to_duration(t1, t2);
-				return new_duration + self.elapsed;
+				new_duration + self.elapsed
 			},
 			None => {
-				return self.elapsed;
+				self.elapsed
 			},
 		}
 	}
 	pub fn elapsed_ms(&self) -> i64 {
-		return self.elapsed().num_milliseconds();
+		self.elapsed().num_milliseconds()
 	}
 }
