@@ -11,5 +11,4 @@ keywords = ["stopwatch", "timing"]
 license = "MIT"
 
 [dependencies]
-time = "*"
 num = "*"
