@@ -1,7 +1,7 @@
-extern crate time;
 extern crate num;
 extern crate stopwatch;
 
+use std::time::Duration;
 use stopwatch::{Stopwatch};
 
 static SLEEP_MS: i64 = 50;
@@ -10,7 +10,7 @@ static TOLERANCE_PERCENTAGE: f64 = 0.3;
 #[test]
 fn repeated_stops() {
 	let mut sw = Stopwatch::start_new();
-	for _ in (0..1000i32) {
+	for _ in 0..1000i32 {
 		sw.stop();
 		sw.start();
 	}
@@ -101,7 +101,7 @@ fn reset() {
 
 fn sleep_ms(ms: i64) {
 	use num::ToPrimitive;
-	std::thread::sleep_ms(ms.to_u32().unwrap())
+	std::thread::sleep(Duration::from_millis(ms.to_u64().unwrap()))
 }
 
 fn assert_near(x: i64, y: i64, tolerance: i64) {

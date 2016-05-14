@@ -1,14 +1,12 @@
-extern crate time;
 extern crate num;
 
 use std::default::Default;
 use std::fmt;
-use num::traits::ToPrimitive;
-use time::Duration;
+use std::time::{Duration, Instant};
 
 #[derive(Clone, Copy)]
 pub struct Stopwatch {
-	start_time: Option<u64>,
+	start_time: Option<Instant>,
 	elapsed: Duration,
 }
 
@@ -16,32 +14,15 @@ impl Default for Stopwatch {
 	fn default () -> Stopwatch {
 		Stopwatch {
 			start_time: None,
-			elapsed: Duration::zero(),
+			elapsed: Duration::from_secs(0),
 		}
 	}
 }
 
 impl fmt::Display for Stopwatch {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		return write!(f, "{}", self.elapsed());
+		return write!(f, "{}ms", self.elapsed_ms());
 	}
-}
-
-fn current_time() -> u64 {
-	return time::precise_time_ns();
-}
-
-// This only works under the assumption that less than 2^63 ns have passed between t1 and t2 (~292 years)
-fn ns_times_to_duration(t1: u64, t2: u64) -> Duration {
-	let diff_u = t2 - t1; // works even if there's wraparound
-	let diff_i = match diff_u.to_i64() {
-		Some(i) => i,
-		None => {
-			debug_assert!(false, "Stopwatch saw a time of more than 292 years, this probably indicates a bug");
-			0
-		}
-	};
-	return Duration::nanoseconds(diff_i);
 }
 
 impl Stopwatch {
@@ -56,15 +37,15 @@ impl Stopwatch {
 	}
 
 	pub fn start(&mut self) {
-		self.start_time = Some(current_time());
+		self.start_time = Some(Instant::now());
 	}
 	pub fn stop(&mut self) {
 		self.elapsed = self.elapsed();
 		self.start_time = None;
 	}
 	pub fn reset(&mut self) {
+		self.elapsed = Duration::from_secs(0);
 		self.start_time = None;
-		self.elapsed = Duration::zero();
 	}
 	pub fn restart(&mut self) {
 		self.reset();
@@ -78,9 +59,7 @@ impl Stopwatch {
 	pub fn elapsed(&self) -> Duration {
 		match self.start_time {
 			Some(t1) => {
-				let t2 = current_time();
-				let new_duration = ns_times_to_duration(t1, t2);
-				return new_duration + self.elapsed;
+				return t1.elapsed() + self.elapsed;
 			},
 			None => {
 				return self.elapsed;
@@ -88,6 +67,7 @@ impl Stopwatch {
 		}
 	}
 	pub fn elapsed_ms(&self) -> i64 {
-		return self.elapsed().num_milliseconds();
+		let dur = self.elapsed();
+		return (dur.as_secs() * 1000 + (dur.subsec_nanos() / 1000000) as u64) as i64;
 	}
 }
