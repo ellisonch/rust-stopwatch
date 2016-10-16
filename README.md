@@ -9,6 +9,10 @@ To use, add the following line to `Cargo.toml` under `[dependencies]`:
 
 stopwatch = "0.0.7"
 ```
+or alternatively,
+```toml
+stopwatch = { git = "https://github.com/ellisonch/rust-stopwatch.git" }
+```
 
 ## Example
 ```rust
