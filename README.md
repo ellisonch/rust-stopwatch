@@ -3,6 +3,13 @@ This is a simple module used to time things in Rust.
 
 [![Build Status](https://travis-ci.org/ellisonch/rust-stopwatch.svg?branch=master)](https://travis-ci.org/ellisonch/rust-stopwatch)
 
+## Usage
+To use, add the following line to `Cargo.toml` under `[dependencies]`:
+```toml
+
+stopwatch = "0.0.7"
+```
+
 ## Example
 ```rust
 extern crate stopwatch;
