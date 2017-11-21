@@ -95,6 +95,56 @@ fn reset() {
 	assert_eq!(sw.elapsed_ms(), 0);
 }
 
+#[test]
+fn split_on_started_watch() {
+	let mut sw = Stopwatch::start_new();
+	sleep_ms(SLEEP_MS);
+	assert_split_near(&mut sw, SLEEP_MS);
+	sleep_ms(SLEEP_MS);
+	assert_split_near(&mut sw, SLEEP_MS);
+
+	assert_sw_near(sw, 2 * SLEEP_MS);
+}
+
+#[test]
+fn split_on_resumed_watch() {
+	let mut sw = Stopwatch::new();
+	sleep_ms(SLEEP_MS);
+	assert_split_near(&mut sw, 0);
+	sleep_ms(SLEEP_MS);
+	assert_split_near(&mut sw, 0);
+	sw.start();
+	sleep_ms(SLEEP_MS);
+	assert_split_near(&mut sw, SLEEP_MS);
+	sleep_ms(SLEEP_MS);
+	assert_split_near(&mut sw, SLEEP_MS);
+	sw.stop();
+	sleep_ms(SLEEP_MS);
+	assert_split_near(&mut sw, 0);
+
+	assert_sw_near(sw, 2 * SLEEP_MS);
+}
+
+#[test]
+fn split_after_reset() {
+	let mut sw = Stopwatch::start_new();
+	sleep_ms(SLEEP_MS);
+	assert_split_near(&mut sw, SLEEP_MS);
+	sw.reset();
+	sleep_ms(SLEEP_MS);
+	assert_split_near(&mut sw, 0);
+}
+
+#[test]
+fn split_after_restart() {
+	let mut sw = Stopwatch::start_new();
+	sleep_ms(SLEEP_MS);
+	assert_split_near(&mut sw, SLEEP_MS);
+	sw.restart();
+	sleep_ms(SLEEP_MS);
+	assert_split_near(&mut sw, SLEEP_MS);
+}
+
 
 
 /////////////// helpers
@@ -114,4 +164,9 @@ fn assert_near(x: i64, y: i64, tolerance: i64) {
 fn assert_sw_near(sw: Stopwatch, elapsed: i64) {
 	let tolerance_value = (TOLERANCE_PERCENTAGE * elapsed as f64) as i64;
 	assert_near(elapsed, sw.elapsed_ms(), tolerance_value);
+}
+
+fn assert_split_near(sw: &mut Stopwatch, elapsed: i64) {
+	let tolerance_value = (TOLERANCE_PERCENTAGE * elapsed as f64) as i64;
+	assert_near(elapsed, sw.elapsed_split_ms(), tolerance_value);
 }
