@@ -52,6 +52,13 @@ fn elapsed_min(){
 }
 
 #[test]
+fn elapsed_hour(){
+	let sw = Stopwatch::start_new();
+	sleep_ms(1000);
+	assert!(sw.elapsed_hour() >= 0.00083 - 0.002 || sw.elapsed_hour() <= 0.00083 + 0.002);
+}
+
+#[test]
 fn stop() {
 	let mut sw = Stopwatch::start_new();
 	sleep_ms(SLEEP_MS);
