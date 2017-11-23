@@ -86,11 +86,32 @@ impl Stopwatch {
 		}
 	}
 
+	/// Returns elapsed time since the start of stopwatch in nanoseconds
+	///
+	/// * `return -> i64`: elapsed time in nanoseconds
+	pub fn elapsed_ns(&self) -> u64 {
+		self.elapsed().subsec_nanos() as u64
+	}
+
 	/// Returns the elapsed time since the start of the stopwatch in milliseconds.
 	pub fn elapsed_ms(&self) -> i64 {
 		let dur = self.elapsed();
 		return (dur.as_secs() * 1000 + (dur.subsec_nanos() / 1000000) as u64) as i64;
 	}
+
+	/// Returns elapsed time since the start of stopwatch in seconds
+	///
+	/// * `return -> f64`: return elapsed time in seconds
+	pub fn elapsed_sec(&self) -> f64 {
+        ((self.elapsed_ms() * 1000) as f64).round() / 1.0e6
+	}
+
+    /// Returns elapsed time since the start of stopwatch in seconds
+	///
+	/// * `return -> f64`: return elapsed time in minutes
+    pub fn elapsed_min(&self) -> f64 {
+        (self.elapsed_sec() * 1000.0 / 60.0).round() / 1.0e3
+    }
 
 	/// Returns the elapsed time since last split or start/restart.
 	///

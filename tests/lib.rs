@@ -31,6 +31,27 @@ fn elapsed_ms() {
 }
 
 #[test]
+fn elapsed_ns(){
+	let sw = Stopwatch::start_new();
+	sleep_ms(2);
+	assert!(sw.elapsed_ns() > 1000000);
+}
+
+#[test]
+fn elapsed_sec(){
+    let sw = Stopwatch::start_new();
+    sleep_ms(2);
+    assert!(sw.elapsed_sec() >= 0.001 || sw.elapsed_sec() <= 0.002);
+}
+
+#[test]
+fn elapsed_min(){
+    let sw = Stopwatch::start_new();
+    sleep_ms(3000);
+    assert!(sw.elapsed_min() >= 0.05 - 0.002 || sw.elapsed_min() <= 0.05 + 0.002);
+}
+
+#[test]
 fn stop() {
 	let mut sw = Stopwatch::start_new();
 	sleep_ms(SLEEP_MS);
