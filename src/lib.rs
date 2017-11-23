@@ -24,7 +24,36 @@ impl Default for Stopwatch {
 
 impl fmt::Display for Stopwatch {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		return write!(f, "{}ms", self.elapsed_ms());
+        let mut ms = self.elapsed_ms();
+        let s: i64;
+        let m: i64;
+        let h: i64;
+        let mut buf = String::new();
+
+        s = ms  / 1000;
+        ms = ms % 1000;
+        buf.insert_str(0, &format!("{}ms", ms));
+        if s > 0{
+            buf.insert_str(0, &format!("{}s ", s));
+        } else {
+            return buf.fmt(f);
+        }
+
+        m = s  / 60;
+        if m > 0{
+            buf.insert_str(0, &format!("{}m ", m));
+        } else {
+            return buf.fmt(f);
+        }
+
+        h = m  / 60;
+        if h > 0{
+            buf.insert_str(0, &format!("{}h ", h));
+        } else {
+            return buf.fmt(f);
+        }
+
+        return buf.fmt(f);
 	}
 }
 

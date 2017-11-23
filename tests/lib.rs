@@ -173,6 +173,23 @@ fn split_after_restart() {
 	assert_split_near(&mut sw, SLEEP_MS);
 }
 
+#[test]
+fn test_display(){
+	let sw = Stopwatch::start_new();
+	sleep_ms(3500);
+	let s = &format!("{}", sw);
+
+    assert!(s == "3s 499ms" || s == "3s 500ms");
+}
+
+#[test]
+fn test_display_low(){
+    let sw = Stopwatch::start_new();
+    sleep_ms(500);
+    let s = &format!("{}", sw);
+
+    assert!(s == "499ms" || s == "500ms");
+}
 
 
 /////////////// helpers
