@@ -1,0 +1,14 @@
+{
+	"name": "rust-stopwatch",
+	"extensions": [
+		"matklad.rust-analyzer",
+		"bungcip.better-toml"
+	],
+	"dockerFile": "Dockerfile",
+	"settings": {
+		"editor.formatOnSave": true,
+		"files.exclude": {
+			"**/LICENSE.txt": true
+		}
+	}
+}
