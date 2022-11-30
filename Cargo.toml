@@ -11,4 +11,4 @@ keywords = ["stopwatch", "timing"]
 license = "MIT"
 
 [dependencies]
-num = "0.1.32"
+num-traits = "0.2.15"
