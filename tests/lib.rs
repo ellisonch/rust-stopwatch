@@ -146,7 +146,7 @@ fn split_after_restart() {
 
 fn sleep_ms(ms: i64) {
     use num_traits::ToPrimitive;
-    std::thread::sleep(Duration::from_millis(ms.to_u64().unwrap()))
+    return std::thread::sleep(Duration::from_millis(ms.to_u64().unwrap()));
 }
 
 fn assert_near(x: i64, y: i64, tolerance: i64) {

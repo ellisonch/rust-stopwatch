@@ -24,21 +24,21 @@ impl Default for Stopwatch {
 
 impl fmt::Display for Stopwatch {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}ms", self.elapsed_ms())
+        return write!(f, "{}ms", self.elapsed_ms());
     }
 }
 
 impl Stopwatch {
     /// Returns a new stopwatch.
     pub fn new() -> Stopwatch {
-        Stopwatch::default()
+        return Stopwatch::default();
     }
 
     /// Returns a new stopwatch which will immediately be started.
     pub fn start_new() -> Stopwatch {
         let mut sw = Stopwatch::new();
         sw.start();
-        sw
+        return sw;
     }
 
     /// Starts the stopwatch.
@@ -84,7 +84,7 @@ impl Stopwatch {
     /// Returns the elapsed time since the start of the stopwatch in milliseconds.
     pub fn elapsed_ms(&self) -> i64 {
         let dur = self.elapsed();
-        (dur.as_secs() * 1000 + dur.subsec_millis() as u64) as i64
+        return (dur.as_secs() * 1000 + dur.subsec_millis() as u64) as i64;
     }
 
     /// Returns the elapsed time since last split or start/restart.
@@ -99,7 +99,7 @@ impl Stopwatch {
                     None => start.elapsed(),
                 };
                 self.split_time = Some(Instant::now());
-                res
+                return res;
             }
             // stopwatch is not running
             None => Duration::from_secs(0),
@@ -111,6 +111,6 @@ impl Stopwatch {
     /// If the stopwatch is in stopped state this will always return zero.
     pub fn elapsed_split_ms(&mut self) -> i64 {
         let dur = self.elapsed_split();
-        (dur.as_secs() * 1000 + dur.subsec_millis() as u64) as i64
+        return (dur.as_secs() * 1000 + dur.subsec_millis() as u64) as i64;
     }
 }
