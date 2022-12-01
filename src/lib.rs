@@ -31,8 +31,7 @@ impl fmt::Display for Stopwatch {
 impl Stopwatch {
     /// Returns a new stopwatch.
     pub fn new() -> Stopwatch {
-        let sw: Stopwatch = Default::default();
-        sw
+        Stopwatch::default()
     }
 
     /// Returns a new stopwatch which will immediately be started.
