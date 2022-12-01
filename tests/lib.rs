@@ -1,6 +1,3 @@
-extern crate num_traits;
-extern crate stopwatch;
-
 use std::time::Duration;
 use stopwatch::Stopwatch;
 
