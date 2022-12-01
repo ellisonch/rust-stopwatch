@@ -5,6 +5,10 @@
 		"bungcip.better-toml"
 	],
 	"dockerFile": "Dockerfile",
+	"containerEnv": {
+		"GIT_EDITOR": "code --wait"
+	},
+	"onCreateCommand": "cargo build",
 	"settings": {
 		"editor.formatOnSave": true,
 		"files.exclude": {
